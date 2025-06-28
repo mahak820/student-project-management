@@ -43,7 +43,8 @@ const deleteProject = expressAsyncHandler(async (req,res) =>{
 const getProject = expressAsyncHandler(async (req, res) => {
 
 
-  const projects = await Project.find()
+ try{
+   const projects = await Project.find()
     .populate('user', 'name')
     .populate('projectTopic', 'topic')
      .populate({
@@ -60,6 +61,10 @@ const getProject = expressAsyncHandler(async (req, res) => {
   }
 
   res.status(200).json(projects);
+ }catch (err) {
+    console.error("Error in /api/project:", err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
 });
 
 

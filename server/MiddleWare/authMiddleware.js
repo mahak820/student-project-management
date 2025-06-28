@@ -4,7 +4,6 @@ const  User = require("../Models/userModel")
 
 
 const protect = expressAsyncHandler (async(req,res,next) =>{
-          console.log("🛡️ protect middleware called for:", req.path);
  let token;
 try{
      if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){

@@ -1,4 +1,5 @@
 const expressAsyncHandler = require("express-async-handler")
+const Review = require("../Models/reviewModel")
 
 const addReview = expressAsyncHandler(async (req,res) =>{
   const {rating,comment} = req.body
@@ -26,4 +27,20 @@ const addReview = expressAsyncHandler(async (req,res) =>{
  
       res.status(201).json(populatedReview)
 })
-module.exports = {addReview}
+
+
+const getReview = expressAsyncHandler (async(req,res) =>{
+    const reviews = await Review.find().populate([
+          { path: "user", select: "name" },
+          { path: "projectTopic", select: "topic" },
+          
+        ]);
+         if(!reviews){
+    res.status(400)
+     throw new Error(" review not found") 
+   }
+ 
+      res.status(201).json(reviews)
+
+})
+module.exports = {addReview,getReview}

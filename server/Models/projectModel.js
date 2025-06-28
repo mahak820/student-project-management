@@ -12,8 +12,8 @@ const projectSchema = new mongoose.Schema({
   ref : 'ProjectTopic',
   required : true
     },
-    // reviews: { type: mongoose.Schema.Types.ObjectId,
-    //    ref: "Review" },
+    reviews: { type: mongoose.Schema.Types.ObjectId,
+       ref: "Review" },
 
     githubLink :{
         type : String,

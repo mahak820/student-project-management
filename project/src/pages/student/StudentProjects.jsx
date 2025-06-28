@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import StudentNavbar from '../../components/StudentNavbar';
 import { useSelector, useDispatch } from 'react-redux';
 import { getStudentProjects } from '../../features/project/projectSlice';
-import { addreviews } from '../../features/reviews/reviewSlice';
+import { addreviews, getreviews } from '../../features/reviews/reviewSlice';
 
 const StudentProjects = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -10,14 +10,18 @@ const StudentProjects = () => {
   const [reviewModal, setReviewModal] = useState(false);
   const [reviewData, setReviewData] = useState({ rating: 5, comment: '' });
 
-   
   const dispatch = useDispatch();
   const { projects } = useSelector(state => state.project);
   const { user } = useSelector(state => state.auth);
+  const { reviews } = useSelector(state => state.review);
 
   useEffect(() => {
     dispatch(getStudentProjects());
+    dispatch(getreviews());
   }, [dispatch]);
+
+ 
+
 
   const TabButton = ({ id, label, count }) => (
     <button
@@ -38,24 +42,19 @@ const StudentProjects = () => {
     return true;
   });
 
- const handleReviewSubmit = (e) => {
-  e.preventDefault();
+  const handleReviewSubmit = (e) => {
+    e.preventDefault();
 
-  const payload = {
-    ...reviewData,
+    const payload = { ...reviewData };
+    const projectTopicId = selectedProject.projectTopic?._id;
+
+    dispatch(addreviews({ payload, projectTopicId }));
+
+    setReviewModal(false);
+    setSelectedProject(null);
+    setReviewData({ rating: 5, comment: '' });
+    alert('Review submitted successfully!');
   };
-
-  const projectTopicId = selectedProject.projectTopic?._id;
- console.log(projectTopicId)
-  dispatch(addreviews({ payload, projectTopicId }));
-
-  setReviewModal(false);
-  setSelectedProject(null);
-  setReviewData({ rating: 5, comment: '' });
-  alert('Review submitted successfully!');
-};
-
- 
 
   return (
     <div className="min-h-screen bg-secondary-50">
@@ -69,8 +68,8 @@ const StudentProjects = () => {
 
         <div className="flex flex-wrap gap-4 mb-8">
           <TabButton id="all" label="All Projects" count={projects.length} />
-          <TabButton id="submitted" label="My Submissions" count={projects.filter(p => p.user._id === user._id).length} />
-          <TabButton id="reviewed" label="Need Review" count={projects.filter(p => !p.reviewed && p.user._id !== user._id).length} />
+            
+          <TabButton id="reviewed" label="All reviews" count={reviews.length} />
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -122,6 +121,46 @@ const StudentProjects = () => {
             <p className="text-secondary-600">Projects will appear here once students submit their work.</p>
           </div>
         )}
+
+        {/* REVIEW DISPLAY SECTION */}
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold text-secondary-900 mb-4">All Reviews</h2>
+
+          {reviews.length === 0 ? (
+            <p className="text-secondary-600">No reviews available yet.</p>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {[...reviews].reverse().map((review) => {
+                const matchedProject = projects.find(
+                  proj => proj.projectTopic?._id === review.projectTopic?._id
+                );
+
+                return (
+                  <div key={review._id} className="border p-4 rounded-lg shadow-sm bg-white">
+                    <h3 className="text-lg font-semibold text-secondary-900 mb-2">
+                      {review.projectTopic?.topic || 'Unknown Topic'}
+                    </h3>
+                    <p className="text-sm text-secondary-700 mb-1">
+                      <span className="font-medium">Student (project owner):</span> {matchedProject?.user?.name || 'Anonymous'}
+                    </p>
+                    <p className="text-sm text-secondary-700 mb-1">
+                      <span className="font-medium">Student (gave the review):</span> {review.user?.name || 'Anonymous'}
+                    </p>
+                    <p className="text-sm text-secondary-700 mb-1">
+                      <span className="font-medium">Rating:</span> {'⭐'.repeat(review.rating)}
+                    </p>
+                    <p className="text-sm text-secondary-700 mb-2">
+                      <span className="font-medium">Comment:</span> {review.comment}
+                    </p>
+                    <p className="text-xs text-secondary-500">
+                      <span className="font-medium">Date:</span> {new Date(review.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Details Modal */}
@@ -205,7 +244,7 @@ const StudentProjects = () => {
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn-primary" >
+                <button type="submit" className="btn-primary">
                   Submit Review
                 </button>
               </div>

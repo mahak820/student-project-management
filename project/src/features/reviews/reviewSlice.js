@@ -35,6 +35,25 @@ const reviewSlice = createSlice({
             state.isSuccess = false
             state.message = action.message
         })
+        // get reviews
+         .addCase(getreviews.pending ,(state,action)=>{
+                state.isLoading = true
+                state.isError = false
+                state.isSuccess = false
+                 // state.message =
+        })
+        .addCase(getreviews.fulfilled ,(state,action)=>{
+            state.isLoading = false
+            state.isError = false
+            state.isSuccess = true
+           state.reviews =  action.payload
+        })
+        .addCase(getreviews.rejected ,(state,action)=>{
+            state.isLoading = false
+            state.isError = true
+            state.isSuccess = false
+            state.message = action.message
+        })
        
      
     }
@@ -44,11 +63,23 @@ export default reviewSlice.reducer
 
 // add review
 export const addreviews = createAsyncThunk("ADD/REVIEW", async({ payload, projectTopicId },thunkAPI)=>{
-    console.log(projectTopicId)
+   
              let token = thunkAPI.getState().auth.user.token
             //  console.log(token)
     try{
         return await reviewService.addReview(payload,projectTopicId,token)
+    }catch(error){
+       const message = error.response.data.message
+       return thunkAPI.rejectWithValue(message) 
+    }
+ })
+ // get review
+export const getreviews = createAsyncThunk("GET/REVIEW", async(_,thunkAPI)=>{
+
+             let token = thunkAPI.getState().auth.user.token
+          
+    try{
+        return await reviewService.getReviews(token)
     }catch(error){
        const message = error.response.data.message
        return thunkAPI.rejectWithValue(message) 

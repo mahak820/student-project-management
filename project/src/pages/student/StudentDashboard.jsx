@@ -9,11 +9,11 @@ const StudentDashboard = () => {
   const { projectTopics } = useSelector(state => state.projectTopic);
   const { profile } = useSelector(state => state.profile);
   const { project } = useSelector(state => state.project)
-  console.log(project)
+
   const dispatch = useDispatch();
 
   const [selectedProjectTopic, setselectedProjectTopic] = useState(null);
-  console.log(selectedProjectTopic)
+ 
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [githubLink, setgithubLink] = useState('');
   const [description, setDescription] = useState('');
