@@ -30,6 +30,9 @@ app.use("/api/user_profile",require("./routes/userProfileRoutes"))
 // project
 app.use("/api/project",require("./routes/projectRoutes"))
 
+// student
+app.use("/api/student",require("./routes/studentRoutes"))
+
 // review
 app.use("/api/review" ,require("./routes/reviewRoutes"))
 

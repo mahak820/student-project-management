@@ -10,6 +10,10 @@ const reviewSchema = new mongoose.Schema({
    required: true,
    ref: "ProjectTopic" // ya Student/Assignment/etc.
  },
+  project: {
+   type: mongoose.Schema.Types.ObjectId,
+   ref: "Project" // ya Student/Assignment/etc.
+ },
   
  rating: {
       type: Number,

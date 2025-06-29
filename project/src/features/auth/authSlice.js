@@ -6,6 +6,7 @@ const authSlice = createSlice({
     name : "auth",
     initialState : {
         user :JSON.parse(localStorage.getItem("user")) || null ,
+        users : [],
         // json parse , string ko object me convert karti hai
         //  like If stored = "{"name":"Mahak","email":"mahak@example.com"}"
 // After parse = { name: "Mahak", email: "mahak@example.com" }
@@ -26,7 +27,8 @@ const authSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-            state.user = action.payload
+           state.users = [...state.users, action.payload]
+
               } )
         .addCase(registerUser.rejected, (state,action) =>{
             state.isError = true
@@ -69,7 +71,6 @@ export default authSlice.reducer
 
 // register 
  export const registerUser = createAsyncThunk("REGISTER/USER" , async(formData,thunkAPI) =>{
-    console.log("hello")
      try{
       return await authService.register(formData)
      } catch(error){

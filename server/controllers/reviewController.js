@@ -32,6 +32,8 @@ const addReview = expressAsyncHandler(async (req,res) =>{
 const getReview = expressAsyncHandler (async(req,res) =>{
     const reviews = await Review.find().populate([
           { path: "user", select: "name" },
+           { path: "project", select: "githubLink" },
+
           { path: "projectTopic", select: "topic" },
           
         ]);
