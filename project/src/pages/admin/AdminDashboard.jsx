@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Sidebar from '../../components/Sidebar'
-import { mockUsers } from '../../data/mockData'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUser } from '../../features/auth/authSlice'
 
 const AdminDashboard = () => {
   const [formData, setFormData] = useState({
@@ -9,9 +10,17 @@ const AdminDashboard = () => {
     phone: '',
     password: ''
   })
+  const dispatch = useDispatch()
+    const {projects} = useSelector(state =>state.project)
+      const  {users } = useSelector(state => state.auth);
+       const { review } = useSelector(state => state.review);
 
+    useEffect (() =>{
+ console.log(users)
+    },[])
   const handleSubmit = (e) => {
     e.preventDefault()
+     dispatch(registerUser(formData))
     // In real app, this would create a new user via API
     console.log('New user created:', formData)
     setFormData({ name: '', email: '', phone: '', password: '' })
@@ -25,7 +34,7 @@ const AdminDashboard = () => {
     })
   }
 
-  const students = mockUsers.filter(user => user.role === 'student')
+  const students = users.filter(user => user.role === 'student')
 
   return (
     <div className="flex min-h-screen bg-secondary-50">
