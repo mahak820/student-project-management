@@ -26,7 +26,6 @@ const StudentDashboard = () => {
     return new Date(lastDate) < new Date();
   };
 
-
   const handleProjectSubmit = () => {
     dispatch(addProject({githubLink,description ,  projectId : selectedProjectTopic._id }))
   
@@ -38,122 +37,233 @@ const StudentDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-secondary-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-indigo-50 relative overflow-hidden">
+      {/* Background Pattern - matching login page */}
       <StudentNavbar />
+      {/* <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_40%,rgba(59,130,246,0.08),transparent_70%)]"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(99,102,241,0.08),transparent_70%)]"></div>
+      </div> */}
 
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+
+      <div className="relative z-10 max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         {!profile?.isComplete && (
-          <div className="mb-8 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-lg">
+          <div className="mb-8 bg-white/80 backdrop-blur-xl border-l-4 border-amber-400 p-6 rounded-2xl shadow-xl border border-white/50">
             <div className="flex">
               <div className="flex-shrink-0">
-                <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
+                <div className="w-10 h-10 bg-amber-100 rounded-xl flex items-center justify-center">
+                  <svg className="h-5 w-5 text-amber-600" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                </div>
               </div>
-              <div className="ml-3">
-                <p className="text-sm text-yellow-700">
-                  <span className="font-medium">Please complete your profile first!</span>{' '}
-                  <a href="/student/profile" className="underline hover:text-yellow-800">
-                    Complete Profile
-                  </a>
+              <div className="ml-4">
+                <div className="inline-flex items-center px-3 py-1 bg-amber-100 rounded-full text-amber-700 text-sm font-medium mb-2">
+                  <span className="w-2 h-2 bg-amber-500 rounded-full mr-2"></span>
+                  Action Required
+                </div>
+                <p className="text-slate-700 font-medium">
+                  Please complete your profile to access all features
                 </p>
+                <a 
+                  href="/student/profile" 
+                  className="inline-flex items-center mt-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors duration-200"
+                >
+                  Complete Profile Now
+                  <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </a>
               </div>
             </div>
           </div>
         )}
 
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-secondary-900">
+        <div className="mb-10">
+          <div className="inline-flex items-center px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-4">
+            <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+            Your Workspace
+          </div>
+          <h1 className="text-4xl font-bold text-slate-800 mb-3">
             Welcome back, {user?.name}! 👋
           </h1>
-          <p className="text-secondary-600 mt-2">Here are your current projects and assignments</p>
+          <p className="text-slate-600 text-lg">Here are your current projects and assignments</p>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           {projectTopics.map((projectTopic) => {
             const isOverdue = isProjectOverdue(projectTopic.last_date);
 
             return (
-              <div key={projectTopic.id} className="card hover:shadow-lg transition-shadow duration-300 p-4 rounded-lg border">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-semibold text-secondary-900">
-                    {projectTopic.topic}
-                  </h3>
+              <div key={projectTopic.id} className="bg-white/80 backdrop-blur-xl rounded-3xl p-6 shadow-2xl border border-white/50 transform transition-all duration-300 hover:shadow-3xl hover:scale-105">
+                <div className="flex justify-between items-start mb-6">
+                  <div className="flex-1">
+                    <div className="inline-flex items-center px-3 py-1 bg-indigo-100 rounded-full text-indigo-700 text-xs font-medium mb-3">
+                      <span className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></span>
+                      Project Assignment
+                    </div>
+                    <h3 className="text-xl font-bold text-slate-800 leading-tight">
+                      {projectTopic.topic}
+                    </h3>
+                  </div>
                 </div>
 
-                <p className="text-secondary-600 mb-4">
+                <div className="mb-6">
                   <button
                     onClick={() => setselectedProjectTopic(projectTopic)}
-                    className="text-blue-600 underline hover:text-blue-800 text-sm"
+                    className="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold text-sm transition-colors duration-200"
                   >
-                    Click here for details
+                    View Project Details
+                    <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
                   </button>
-                </p>
+                </div>
 
-                <div className="space-y-2 text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-secondary-500">Submission Date:</span>
-                    <span className="text-secondary-700 font-medium">
-                      {new Date(projectTopic.submission_date).toLocaleDateString()}
-                    </span>
+                <div className="space-y-3 mb-6">
+                  <div className="bg-gray-50/80 rounded-2xl p-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-600 text-sm font-medium">Submission Date</span>
+                      <div className="flex items-center">
+                        <svg className="w-4 h-4 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <span className="text-slate-800 font-semibold text-sm">
+                          {new Date(projectTopic.submission_date).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex justify-between">
-                    <span className="text-secondary-500">Last Date:</span>
-                    <span className={`font-medium ${isOverdue ? 'text-red-600' : 'text-secondary-700'}`}>
-                      {new Date(projectTopic.last_date).toLocaleDateString()}
-                    </span>
+                  <div className="bg-gray-50/80 rounded-2xl p-4">
+                    <div className="flex justify-between items-center">
+                      <span className="text-slate-600 text-sm font-medium">Deadline</span>
+                      <div className="flex items-center">
+                        <svg className={`w-4 h-4 mr-2 ${isOverdue ? 'text-red-500' : 'text-orange-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span className={`font-semibold text-sm ${isOverdue ? 'text-red-600' : 'text-slate-800'}`}>
+                          {new Date(projectTopic.last_date).toLocaleDateString()}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-             {project.isSubmit ? (
-              <button
-                className="w-full text-sm mt-4 bg-gray-400 text-white py-2 rounded cursor-not-allowed"
-                disabled
-              >
-                Project already submitted
-              </button>
-              ) : (
-                <button
-                  onClick={() => {
-                    setselectedProjectTopic(projectTopic);
-                    setShowSubmitForm(true);
-                  }}
-                  className="w-full btn-primary text-sm mt-4 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"
-                >
-                  Submit Project
-                </button>
-              )}
-
+                {project.isSubmit ? (
+                  <button
+                    className="w-full bg-gray-100 text-gray-500 py-4 rounded-2xl font-semibold text-sm cursor-not-allowed flex items-center justify-center"
+                    disabled
+                  >
+                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Project Submitted
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setselectedProjectTopic(projectTopic);
+                      setShowSubmitForm(true);
+                    }}
+                    className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-2xl font-semibold text-sm shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center group"
+                  >
+                    Submit Project
+                    <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                  </button>
+                )}
               </div>
             );
           })}
         </div>
 
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="card text-center">
-            <div className="text-3xl font-bold text-primary-600 mb-2">
-              {projectTopics.length}
+        <div className="mt-16">
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50">
+            <div className="text-center">
+              <div className="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium mb-6">
+                <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                Dashboard Overview
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                    </svg>
+                  </div>
+                  <div className="text-3xl font-bold text-slate-800 mb-2">
+                    {projectTopics.length}
+                  </div>
+                  <div className="text-slate-600 font-medium">Total Projects</div>
+                </div>
+                
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="text-3xl font-bold text-slate-800 mb-2">
+                    {project.isSubmit ? '1' : '0'}
+                  </div>
+                  <div className="text-slate-600 font-medium">Completed</div>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div className="text-3xl font-bold text-slate-800 mb-2">
+                    {projectTopics.filter(p => !isProjectOverdue(p.last_date)).length}
+                  </div>
+                  <div className="text-slate-600 font-medium">Pending</div>
+                </div>
+
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-100 to-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <div className="text-3xl font-bold text-slate-800 mb-2">
+                    {Math.round((project.isSubmit ? 1 : 0) / Math.max(projectTopics.length, 1) * 100)}%
+                  </div>
+                  <div className="text-slate-600 font-medium">Progress</div>
+                </div>
+              </div>
             </div>
-            <div className="text-secondary-600">Total Projects</div>
           </div>
         </div>
       </div>
 
       {/* 🔽 Modal for Details 🔽 */}
       {selectedProjectTopic && !showSubmitForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 shadow-xl">
-            <div className="flex justify-between items-start mb-4">
-              <h2 className="text-xl font-bold text-secondary-900">{selectedProjectTopic.topic}</h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-8 shadow-3xl border border-white/50">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <div className="inline-flex items-center px-3 py-1 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-3">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                  Project Details
+                </div>
+                <h2 className="text-2xl font-bold text-slate-800">{selectedProjectTopic.topic}</h2>
+              </div>
               <button
                 onClick={() => setselectedProjectTopic(null)}
-                className="text-gray-500 hover:text-gray-800 text-2xl font-bold"
+                className="w-10 h-10 bg-gray-100 hover:bg-gray-200 rounded-2xl flex items-center justify-center transition-colors duration-200"
               >
-                &times;
+                <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
-            <div className="text-secondary-700 whitespace-pre-wrap">
-              {selectedProjectTopic.details}
+            <div className="bg-gray-50/80 rounded-2xl p-6">
+              <div className="text-slate-700 whitespace-pre-wrap leading-relaxed">
+                {selectedProjectTopic.details}
+              </div>
             </div>
           </div>
         </div>
@@ -161,46 +271,67 @@ const StudentDashboard = () => {
 
       {/* 🔽 Modal for Submit URL + Description 🔽 */}
       {showSubmitForm && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg w-full max-w-md p-6 shadow-xl">
-            <h2 className="text-xl font-bold mb-4 text-secondary-900">
-              Submit Project for "{selectedProjectTopic?.topic}"
-            </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+          <div className="bg-white/95 backdrop-blur-xl rounded-3xl w-full max-w-md p-8 shadow-3xl border border-white/50">
+            <div className="mb-6">
+              <div className="inline-flex items-center px-3 py-1 bg-green-100 rounded-full text-green-700 text-sm font-medium mb-3">
+                <span className="w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+                Submit Project
+              </div>
+              <h2 className="text-2xl font-bold text-slate-800">
+                Submit "{selectedProjectTopic?.topic}"
+              </h2>
+            </div>
 
-            <input
-              type="url"
-              className="w-full border border-gray-300 rounded p-2 mb-4"
-              placeholder="Enter your project URL"
-              value={githubLink}
-              onChange={(e) => setgithubLink(e.target.value)}
-            />
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-3">
+                  Project URL
+                </label>
+                <input
+                  type="url"
+                  className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  placeholder="Enter your project URL (GitHub, etc.)"
+                  value={githubLink}
+                  onChange={(e) => setgithubLink(e.target.value)}
+                />
+              </div>
 
-            <textarea
-              className="w-full border border-gray-300 rounded p-2 mb-4"
-              placeholder="Enter a short description"
-              rows="4"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-3">
+                  Project Description
+                </label>
+                <textarea
+                  className="w-full px-4 py-4 bg-gray-50/80 border border-gray-200 rounded-2xl text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300"
+                  placeholder="Brief description of your project"
+                  rows="4"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+            </div>
 
-            <div className="flex justify-end gap-4">
-            <button
-  className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
-  onClick={() => {
-    setShowSubmitForm(false);
-    setselectedProjectTopic(null); // 👈 this hides the description/details
-    setgithubLink('');
-    setDescription('');
-  }}
->
-  Cancel
-</button>
+            <div className="flex gap-4 mt-8">
+              <button
+                className="flex-1 px-6 py-4 bg-gray-100 text-gray-700 rounded-2xl font-semibold hover:bg-gray-200 transition-colors duration-200"
+                onClick={() => {
+                  setShowSubmitForm(false);
+                  setselectedProjectTopic(null);
+                  setgithubLink('');
+                  setDescription('');
+                }}
+              >
+                Cancel
+              </button>
 
               <button
                 onClick={handleProjectSubmit}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 rounded-2xl font-semibold shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center group"
               >
-                Submit
+                Submit Project
+                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
               </button>
             </div>
           </div>
