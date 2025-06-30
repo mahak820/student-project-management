@@ -14,27 +14,24 @@ const addProfile = async (formData,token) => {
 
 // get 
 const getProfile = async (token) => {
-    console.log(token)
+
   const config = {
     headers: {
       Authorization: `Bearer ${token}`
     }
   };
   const response = await axios.get("/api/user_profile", config);
-  console.log(response.data)
   return response.data;
 };
 
 // update profile 
 const updatedprofile = async (formData,token) => {
-    console.log(token)
   const config = {
     headers: {
       Authorization: `Bearer ${token}`
     }
   };
   const response = await axios.put("/api/user_profile", formData,config);
-  console.log(response.data)
   return response.data;
 };
 

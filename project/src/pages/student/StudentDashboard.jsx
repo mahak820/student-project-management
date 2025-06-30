@@ -3,6 +3,9 @@ import StudentNavbar from '../../components/StudentNavbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTopics } from '../../features/projectTopic/projectTopicSlice';
 import { addProject } from '../../features/project/projectSlice';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 
 const StudentDashboard = () => {
   const { user } = useSelector(state => state.auth);
@@ -11,6 +14,7 @@ const StudentDashboard = () => {
   const { project } = useSelector(state => state.project)
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const [selectedProjectTopic, setselectedProjectTopic] = useState(null);
  
@@ -26,14 +30,17 @@ const StudentDashboard = () => {
     return new Date(lastDate) < new Date();
   };
 
-  const handleProjectSubmit = () => {
-    dispatch(addProject({githubLink,description ,  projectId : selectedProjectTopic._id }))
+  const handleProjectSubmit = async() => {
+    await dispatch(addProject({githubLink,description ,  projectId : selectedProjectTopic._id }))
   
     // 🟡 Send to backend here
     setShowSubmitForm(false);
+    setselectedProjectTopic(null);
     setgithubLink('');
     setDescription('');
-    alert('Project submitted successfully!');
+    toast.success("Project submitted successfully")
+    navigate('/student/projects')
+    
   };
 
   return (
@@ -176,66 +183,6 @@ const StudentDashboard = () => {
               </div>
             );
           })}
-        </div>
-
-        <div className="mt-16">
-          <div className="bg-white/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/50">
-            <div className="text-center">
-              <div className="inline-flex items-center px-4 py-2 bg-purple-100 rounded-full text-purple-700 text-sm font-medium mb-6">
-                <span className="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
-                Dashboard Overview
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
-                    </svg>
-                  </div>
-                  <div className="text-3xl font-bold text-slate-800 mb-2">
-                    {projectTopics.length}
-                  </div>
-                  <div className="text-slate-600 font-medium">Total Projects</div>
-                </div>
-                
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div className="text-3xl font-bold text-slate-800 mb-2">
-                    {project.isSubmit ? '1' : '0'}
-                  </div>
-                  <div className="text-slate-600 font-medium">Completed</div>
-                </div>
-
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-orange-100 to-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div className="text-3xl font-bold text-slate-800 mb-2">
-                    {projectTopics.filter(p => !isProjectOverdue(p.last_date)).length}
-                  </div>
-                  <div className="text-slate-600 font-medium">Pending</div>
-                </div>
-
-                <div className="text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-purple-100 to-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <svg className="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                    </svg>
-                  </div>
-                  <div className="text-3xl font-bold text-slate-800 mb-2">
-                    {Math.round((project.isSubmit ? 1 : 0) / Math.max(projectTopics.length, 1) * 100)}%
-                  </div>
-                  <div className="text-slate-600 font-medium">Progress</div>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 

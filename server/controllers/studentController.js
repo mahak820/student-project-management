@@ -5,8 +5,9 @@ const Student = require("../Models/studentModel.js")
 const Project = require('../Models/projectModel.js');
 const Review = require('../Models/reviewModel.js');
 const ProjectTopic = require('../Models/projectTopicModel.js');
+const expressAsyncHandler = require("express-async-handler");
 
-const getAllStudentsWithDetails = async (req, res) => {
+const getAllStudentsWithDetails = expressAsyncHandler(async (req, res) => {
   try {
     // Step 1: Get all project topics
     const topics = await ProjectTopic.find();
@@ -20,10 +21,6 @@ const getAllStudentsWithDetails = async (req, res) => {
         .populate('projectTopic', 'topic');
           console.log("Topic:", topic.topic);
   console.log(projects)
-
-
-
-
       // Step 3: For each project, get reviews
       const projectsWithReviews = await Promise.all(
         projects.map(async (project) => {
@@ -53,5 +50,5 @@ const getAllStudentsWithDetails = async (req, res) => {
     console.error("Error in getAllStudentsWithDetails:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-};
+})
 module.exports =  {getAllStudentsWithDetails}

@@ -68,4 +68,20 @@ const getProject = expressAsyncHandler(async (req, res) => {
 });
 
 
-module.exports = {deleteProject,addProject,getProject}
+const getUserProject = expressAsyncHandler(async(req,res) =>{
+ try {
+    // const userId = req.user._id // ✅ yeh req.user middleware se aata hai (authMiddleware)
+    
+  const projectsuser = await Project.find({ user: req.params._uid })
+  .populate('user', 'name')
+  .populate('projectTopic', 'topic')
+
+res.status(200).json(projectsuser)
+
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong while fetching your projects.' })
+  }
+})
+
+
+module.exports = {deleteProject,addProject,getProject,getUserProject}

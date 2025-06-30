@@ -181,31 +181,7 @@ user: req.user._id, // ✅ from protect middleware
 })
 
 
-// add a rank
-const addRank = expressAsyncHandler(async(req,res)  =>{
- const {position} = req.body
 
- if(!position){
- res.status(400)
-    throw new Error("please give the position")    
- }
-
- const rank = await Rank.create({
-user: req.user._id, // ✅ from protect middleware
-    projectTopic: req.params._ptid,
-    position
- })
- const populatedRank = await rank.populate([
-         { path: "user", select: "name" },
-         { path: "projectTopic", select: "topic" },
-       ]);
-   if(!rank){
-   res.status(400)
-    throw new Error(" review not found") 
-  }
-
-     res.status(201).json(populatedRank)
-})
 
 
 // delete user
@@ -229,4 +205,43 @@ const generateToken = (id) => {
     return jwt.sign({id : id } , process.env.JWT_secret , { expiresIn: "30d" });
 
 }
+
+// add a rank
+const addRank = expressAsyncHandler(async(req,res)  =>{
+ const { position } = req.body;
+  const projectId = req.params._pid;
+
+  if (!position) {
+    res.status(400);
+    throw new Error("Please provide the position");
+  }
+
+  // 🔍 Step 1: Find the project from DB
+  const project = await Project.findById(projectId);
+  if (!project) {
+    res.status(404);
+    throw new Error("Project not found");
+  }
+
+  // 📌 Step 2: Extract projectTopic from project
+  const projectTopicId = project.projectTopic;
+
+  // ✅ Step 3: Create the rank entry
+  const rank = await Rank.create({
+    user: req.user._id,
+    project: projectId,
+    projectTopic: projectTopicId,
+    position,
+  });
+
+  // ✅ Step 4: Populate for response
+  const populatedRank = await rank.populate([
+    { path: "user", select: "name" },
+    { path: "project", select: "githubLink description" },
+    { path: "projectTopic", select: "topic" },
+  ]);
+
+  res.status(201).json(populatedRank);
+});
+
 module.exports = {getAllProjectTopic, updateProjectTopic,addProjectTopic,getAllUser,getUser,addUser,getProject,getProjects,addRank,addReview,getAllUserProfile,deleteProjectTopic,deleteUser}

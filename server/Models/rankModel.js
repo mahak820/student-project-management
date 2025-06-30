@@ -9,8 +9,11 @@ const rankSchena = new mongoose.Schema({
     },
     projectTopic: {
    type: mongoose.Schema.Types.ObjectId,
-   required: true,
-   ref: "ProjectTopic" // ya Student/Assignment/etc.
+      ref: "ProjectTopic" // ya Student/Assignment/etc.
+ },
+  project: {
+   type: mongoose.Schema.Types.ObjectId,
+   ref: "Project" // ya Student/Assignment/etc.
  },
  position :{
     type : String,

@@ -39,6 +39,9 @@ app.use("/api/review" ,require("./routes/reviewRoutes"))
 // auth
 app.use("/api/auth",require("./routes/authRoutes"))
 
+// auth
+app.use("/api/rank",require("./routes/rankRoutes"))
+
 // project topic
 app.use("/api/projectTopic",require("./routes/projectTopic"))
 app.use(errorHandler)
