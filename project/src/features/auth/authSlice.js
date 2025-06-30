@@ -6,6 +6,7 @@ const authSlice = createSlice({
     name : "auth",
     initialState : {
         user :JSON.parse(localStorage.getItem("user")) || null ,
+        newUser : null ,
         users : [],
         // json parse , string ko object me convert karti hai
         //  like If stored = "{"name":"Mahak","email":"mahak@example.com"}"
@@ -27,7 +28,7 @@ const authSlice = createSlice({
             state.isError = false
             state.isLoading = false
             state.isSuccess = true
-           state.users = [...state.users, action.payload]
+           state.user = action.payload
 
               } )
         .addCase(registerUser.rejected, (state,action) =>{
@@ -61,6 +62,44 @@ const authSlice = createSlice({
             state.isLoading = false
             state.isSuccess = true
               } )
+        //GET ALL USERS ADMIN
+        .addCase(getAllUsersAdmin.pending, (state,action) =>{
+            state.isError = false
+            state.isLoading = true
+            state.isSuccess = false
+              } )
+        .addCase(getAllUsersAdmin.fulfilled, (state,action) =>{
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.users = action.payload
+              } )
+        .addCase(getAllUsersAdmin.rejected, (state,action) =>{
+            state.isError = true
+            state.isLoading = false
+            state.isSuccess = false
+            state.message = action.payload
+              } )
+              //Register userregisterUserAdmin)
+        .addCase(registerUserAdmin.pending, (state,action) =>{
+            state.isError = false
+            state.isLoading = true
+            state.isSuccess = false
+            state.newUser = null
+              } )
+        .addCase(registerUserAdmin.fulfilled, (state,action) =>{
+            state.isError = false
+            state.isLoading = false
+            state.isSuccess = true
+            state.newUser = action.payload
+              } )
+        .addCase(registerUserAdmin.rejected, (state,action) =>{
+            state.isError = true
+            state.isLoading = false
+            state.isSuccess = false
+            state.message = action.payload
+            state.newUser = null
+              } )
 
     }
     
@@ -92,6 +131,29 @@ export default authSlice.reducer
  export const logoutUser = createAsyncThunk("LOGOUT/USER" , async(formData,thunkAPI) =>{
      try{
       return await authService.logout()
+     } catch(error){
+        const message = error.response.data.message
+        return thunkAPI.rejectWithValue(message)
+     }
+})
+
+//GET ALL ADMIN USERS
+export const getAllUsersAdmin = createAsyncThunk("GET/ALLUSERS" , async(_,thunkAPI) =>{
+
+  let token = thunkAPI.getState().auth.user.token
+
+     try{
+      return await authService.allUsers(token)
+     } catch(error){
+        const message = error.response.data.message
+        return thunkAPI.rejectWithValue(message)
+     }
+})
+
+// register User admin 
+ export const registerUserAdmin = createAsyncThunk("REGISTER/USER_ADMIN" , async(formData,thunkAPI) =>{
+     try{
+      return await authService.adminRegister(formData)
      } catch(error){
         const message = error.response.data.message
         return thunkAPI.rejectWithValue(message)

@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 
-const projectSchema = new mongoose.Schema({
+const projectSchema = new mongoose.Schema(
+  {
 
     user :{
   type: mongoose.Schema.Types.ObjectId,
@@ -28,5 +29,9 @@ const projectSchema = new mongoose.Schema({
         default : false
     }
 
-})
+} , 
+{
+  timestamps : true
+}
+)
 module.exports = mongoose.model("Project",projectSchema)

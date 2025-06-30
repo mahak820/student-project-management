@@ -1,4 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -75,6 +79,19 @@ const FloatingCard = ({ children, delay = 0, className = "" }) => {
 
 const LandingPage = () => {
   const [isVisible, setIsVisible] = useState(false);
+
+  const {user} = useSelector(state => state.auth)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    if(user && user.isAdmin){
+      navigate('/admin')
+    }
+
+    if(user){
+      navigate('/student')
+    }
+  } , [user])
 
   useEffect(() => {
     setIsVisible(true);

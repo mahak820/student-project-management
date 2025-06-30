@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import Sidebar from '../../components/Sidebar'
 import { mockUsers, mockSubmissions, mockProjects } from '../../data/mockData'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { getAllUsersAdmin } from '../../features/auth/authSlice'
+import { getAllProjectsOfUser } from '../../features/project/projectSlice'
 
 const AdminUsers = () => {
   const [selectedUser, setSelectedUser] = useState(null)
@@ -9,6 +13,15 @@ const AdminUsers = () => {
   const [selectedSubmission, setSelectedSubmission] = useState(null)
 
   const students = mockUsers.filter(user => user.role === 'student')
+  const dispatch = useDispatch()
+
+  const {users} = useSelector(state => state.auth)
+  const {projects , isLoading , isError} = useSelector(state => state.project)
+
+  useEffect( () => {
+    dispatch(getAllUsersAdmin())
+  } , [dispatch])
+
 
   const getUserSubmissions = (userId) => {
     return mockSubmissions.filter(s => s.studentId === userId).map(submission => {
@@ -24,6 +37,14 @@ const AdminUsers = () => {
     setReviewModal(false)
     setReviewData({ rating: 5, comment: '' })
     alert('Review submitted successfully!')
+  }
+
+  const handleClick = async(user) => {
+
+    setSelectedUser(user)
+    
+    await dispatch(getAllProjectsOfUser(user._id))
+
   }
 
   return (
@@ -44,16 +65,16 @@ const AdminUsers = () => {
             <div className="lg:col-span-1">
               <div className="card">
                 <h2 className="text-xl font-semibold text-secondary-900 mb-4">
-                  All Students ({students.length})
+                  All Students ({users?.length})
                 </h2>
                 
                 <div className="space-y-3">
-                  {students.map((user) => (
+                  {users.map((user) => (
                     <div
-                      key={user.id}
-                      onClick={() => setSelectedUser(user)}
+                      key={user._id}
+                      onClick={() => handleClick(user)}
                       className={`p-4 rounded-lg border-2 cursor-pointer transition-colors ${
-                        selectedUser?.id === user.id
+                        selectedUser?._id === user._id
                           ? 'border-primary-500 bg-primary-50'
                           : 'border-secondary-200 hover:border-secondary-300'
                       }`}
@@ -68,9 +89,6 @@ const AdminUsers = () => {
                           </p>
                         </div>
                         <div className="text-right">
-                          <div className="text-sm text-secondary-500">
-                            Projects: {getUserSubmissions(user.id).length}
-                          </div>
                           <div className={`text-xs px-2 py-1 rounded-full ${
                             user.profileComplete
                               ? 'bg-green-100 text-green-700'
@@ -123,7 +141,7 @@ const AdminUsers = () => {
                           </div>
                           <div className="flex justify-between">
                             <span className="text-secondary-500">Role:</span>
-                            <span className="text-secondary-700 capitalize">{selectedUser.role}</span>
+                            <span className="text-secondary-700 capitalize">Student</span>
                           </div>
                         </div>
                       </div>
@@ -133,7 +151,7 @@ const AdminUsers = () => {
                         <div className="space-y-2 text-sm">
                           <div className="flex justify-between">
                             <span className="text-secondary-500">Projects Submitted:</span>
-                            <span className="text-secondary-700">{getUserSubmissions(selectedUser.id).length}</span>
+                            <span className="text-secondary-700">{projects?.length}</span>
                           </div>
                           <div className="flex justify-between">
                             <span className="text-secondary-500">Last Login:</span>
@@ -147,35 +165,35 @@ const AdminUsers = () => {
                   {/* User Projects */}
                   <div className="card">
                     <h3 className="text-xl font-semibold text-secondary-900 mb-4">
-                      Submitted Projects ({getUserSubmissions(selectedUser.id).length})
+                      Submitted Projects ({projects?.length})
                     </h3>
                     
-                    {getUserSubmissions(selectedUser.id).length > 0 ? (
+                    {projects?.length > 0 ? (
                       <div className="grid gap-4 md:grid-cols-2">
-                        {getUserSubmissions(selectedUser.id).map((submission) => (
-                          <div key={submission.id} className="border border-secondary-200 rounded-lg p-4">
+                        {projects?.map((project) => (
+                          <div key={project._id} className="border border-secondary-200 rounded-lg p-4">
                             <div className="flex justify-between items-start mb-3">
                               <h4 className="font-medium text-secondary-900">
-                                {submission.project?.title}
+                                {project.projectTopic?.topic}
                               </h4>
-                              {submission.rating && (
+                              {/* {project.rating && (
                                 <div className="flex items-center">
                                   <span className="text-yellow-400">⭐</span>
                                   <span className="text-sm text-secondary-600 ml-1">
-                                    {submission.rating}/5
+                                    {project.rating}/5
                                   </span>
                                 </div>
-                              )}
+                              )} */}
                             </div>
                             
                             <p className="text-sm text-secondary-600 mb-3">
-                              Submitted: {new Date(submission.submittedAt).toLocaleDateString()}
+                              Submitted: {new Date(project.createdAt).toLocaleDateString()}
                             </p>
                             
-                            {submission.githubUrl && (
+                            {project.githubLink && (
                               <div className="mb-3">
                                 <a 
-                                  href={submission.githubUrl}
+                                  href={project.githubLink}
                                   target="_blank"
                                   rel="noopener noreferrer"
                                   className="text-primary-600 hover:text-primary-700 text-sm"
@@ -185,7 +203,7 @@ const AdminUsers = () => {
                               </div>
                             )}
                             
-                            {submission.feedback ? (
+                            {/* {submission.feedback ? (
                               <div className="p-3 bg-secondary-50 rounded-lg mb-3">
                                 <p className="text-sm text-secondary-700">
                                   <span className="font-medium">Feedback:</span> {submission.feedback}
@@ -201,7 +219,7 @@ const AdminUsers = () => {
                               >
                                 Give Review
                               </button>
-                            )}
+                            )} */}
                           </div>
                         ))}
                       </div>

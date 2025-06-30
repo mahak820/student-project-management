@@ -3,6 +3,9 @@ import StudentNavbar from '../../components/StudentNavbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTopics } from '../../features/projectTopic/projectTopicSlice';
 import { addProject } from '../../features/project/projectSlice';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 
 const StudentDashboard = () => {
   const { user } = useSelector(state => state.auth);
@@ -11,6 +14,7 @@ const StudentDashboard = () => {
   const { project } = useSelector(state => state.project)
 
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   const [selectedProjectTopic, setselectedProjectTopic] = useState(null);
  
@@ -26,14 +30,16 @@ const StudentDashboard = () => {
     return new Date(lastDate) < new Date();
   };
 
-  const handleProjectSubmit = () => {
-    dispatch(addProject({githubLink,description ,  projectId : selectedProjectTopic._id }))
+  const handleProjectSubmit = async() => {
+    await dispatch(addProject({githubLink,description ,  projectId : selectedProjectTopic._id }))
   
     // 🟡 Send to backend here
     setShowSubmitForm(false);
     setgithubLink('');
     setDescription('');
-    alert('Project submitted successfully!');
+    toast.success("Project submitted successfully")
+    navigate('/student/projects')
+    
   };
 
   return (

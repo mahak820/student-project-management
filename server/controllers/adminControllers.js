@@ -48,7 +48,7 @@ const addUser = expressAsyncHandler (async(req,res) => {
 
 // get all users
 const getAllUser = expressAsyncHandler(async (req,res) =>{
- const users = await User.find().select("-password")
+ const users = await User.find({isAdmin : false}).select("-password")
 
  if(!users){
     res.status(400)
@@ -75,6 +75,19 @@ const getUser = expressAsyncHandler( async (req,res) =>{
 // get all projects
 const getProjects = async(req,res) =>{
     const projects = await Project.find()
+      if(!projects){
+      res.status(400)
+    throw new Error("projects not found")    
+    }
+     res.status(200).json(projects)
+}
+
+// get all projects
+const getUserAllProjects = async(req,res) =>{
+
+  const userId = req.params.uid
+
+    const projects = await Project.find({user : userId}).populate('projectTopic')
       if(!projects){
       res.status(400)
     throw new Error("projects not found")    
@@ -221,6 +234,19 @@ const deleteUser = expressAsyncHandler(async(req,res)  =>{
        })
 })
 
+
+//GET ALL REVIEWS 
+const getAllReviews = expressAsyncHandler(async(req,res) =>{
+
+    const reviews = await Review.find()
+     if(!reviews){
+      res.status(400)
+    throw new Error("not found all the project topic")  
+  }
+  res.status(200).json(reviews)
+
+})
+
 const getAllUserProfile = async(req,res)  =>{
     res.send("see the profile of all user")
 }
@@ -229,4 +255,4 @@ const generateToken = (id) => {
     return jwt.sign({id : id } , process.env.JWT_secret , { expiresIn: "30d" });
 
 }
-module.exports = {getAllProjectTopic, updateProjectTopic,addProjectTopic,getAllUser,getUser,addUser,getProject,getProjects,addRank,addReview,getAllUserProfile,deleteProjectTopic,deleteUser}
+module.exports = {getAllReviews , getAllProjectTopic, updateProjectTopic,addProjectTopic,getAllUser,getUser,addUser,getProject,getProjects,addRank,addReview,getAllUserProfile,deleteProjectTopic,deleteUser , getUserAllProjects}
