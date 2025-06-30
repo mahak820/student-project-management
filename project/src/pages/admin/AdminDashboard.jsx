@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react'
 import Sidebar from '../../components/Sidebar'
 import { useDispatch, useSelector } from 'react-redux'
-import { registerUser } from '../../features/auth/authSlice'
+import { getAllUsersAdmin, registerUser, registerUserAdmin } from '../../features/auth/authSlice'
+import { addProjectTopic, getAllProjectTopcis, getAllSubmittedProjects } from '../../features/project/projectSlice'
+import { getAllReviewsAdmin } from '../../features/reviews/reviewSlice'
+import {toast} from 'react-toastify'
 
 const AdminDashboard = () => {
   const [formData, setFormData] = useState({
@@ -10,21 +13,48 @@ const AdminDashboard = () => {
     phone: '',
     password: ''
   })
+
+  const [projectFormData, setProjectFormData] = useState({
+    topic: '',
+    details: '',
+    submission_date: '',
+    last_date: ''
+  })
+
   const dispatch = useDispatch()
     const {projects} = useSelector(state =>state.project)
-      const  {users } = useSelector(state => state.auth);
-       const { review } = useSelector(state => state.review);
+      const  {users , isError , message , isLoading , newUser} = useSelector(state => state.auth);
+       const { reviews } = useSelector(state => state.review);
+    const {allTopics} = useSelector(state => state.project)
 
-    useEffect (() =>{
- console.log(users)
-    },[])
-  const handleSubmit = (e) => {
+const fetchAllDetails = async() => {
+  await dispatch(getAllProjectTopcis())
+  await dispatch(getAllUsersAdmin())
+  await dispatch(getAllSubmittedProjects())
+  await dispatch(getAllReviewsAdmin())
+}
+
+  useEffect(() => {
+    fetchAllDetails()
+  } , [dispatch , isError , message])
+
+  const handleSubmit = async(e) => {
     e.preventDefault()
-     dispatch(registerUser(formData))
-    // In real app, this would create a new user via API
-    console.log('New user created:', formData)
-    setFormData({ name: '', email: '', phone: '', password: '' })
-    alert('User created successfully!')
+     const response = await dispatch(registerUserAdmin(formData))
+     
+    if(response.error){
+      toast.error("User already exists")
+    }
+    else{
+      toast.success("User Registered Successfully")
+    }
+    setFormData({
+      name : '' , 
+      email : '' , 
+      password : '' , 
+      phone : ''
+    })
+   
   }
 
   const handleChange = (e) => {
@@ -32,6 +62,35 @@ const AdminDashboard = () => {
       ...formData,
       [e.target.name]: e.target.value
     })
+  }
+
+  const handleProjectSubmit = async(e) => {
+    e.preventDefault()
+    // Add your project creation logic here
+    console.log('Project Form Data:', projectFormData)
+    dispatch(addProjectTopic( projectFormData))
+    
+    toast.success("Project Created Successfully")
+    
+    setProjectFormData({
+      topic: '',
+      details: '',
+      submission_date: '',
+      last_date: ''
+    })
+  }
+
+  const handleProjectChange = (e) => {
+    setProjectFormData({
+      ...projectFormData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return ''
+    const date = new Date(dateString)
+    return date.toISOString().split('T')[0]
   }
 
   const students = users.filter(user => user.role === 'student')
@@ -53,35 +112,36 @@ const AdminDashboard = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="card text-center">
               <div className="text-3xl font-bold text-primary-600 mb-2">
-                {students.length}
+                {users?.length}
               </div>
               <div className="text-secondary-600">Total Students</div>
             </div>
             
             <div className="card text-center">
               <div className="text-3xl font-bold text-green-600 mb-2">
-                5
+                {allTopics?.length}
               </div>
               <div className="text-secondary-600">Active Projects</div>
             </div>
             
             <div className="card text-center">
               <div className="text-3xl font-bold text-yellow-600 mb-2">
-                12
+                {projects?.length}
               </div>
               <div className="text-secondary-600">Submissions</div>
             </div>
             
             <div className="card text-center">
               <div className="text-3xl font-bold text-blue-600 mb-2">
-                8
+                {reviews?.length}
               </div>
               <div className="text-secondary-600">Reviews</div>
             </div>
           </div>
 
-          {/* Add New User Form */}
+          {/* Add New User Form & Create New Project Form */}
           <div className="grid lg:grid-cols-2 gap-8">
+            {/* Add New Student Form */}
             <div className="card">
               <h2 className="text-xl font-semibold text-secondary-900 mb-6">
                 Add New Student
@@ -150,61 +210,73 @@ const AdminDashboard = () => {
               </form>
             </div>
 
-            {/* Recent Activity */}
+            {/* Create New Project Form */}
             <div className="card">
               <h2 className="text-xl font-semibold text-secondary-900 mb-6">
-                Recent Activity
+                Create New Project
               </h2>
               
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-3 bg-secondary-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-secondary-900">
-                      New project submitted
-                    </p>
-                    <p className="text-xs text-secondary-500">
-                      John Doe submitted "E-commerce Website" - 2 hours ago
-                    </p>
-                  </div>
+              <form onSubmit={handleProjectSubmit} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-secondary-700 mb-2">
+                    Project Title
+                  </label>
+                  <input
+                    type="text"
+                    name="topic"
+                    value={projectFormData.topic}
+                    onChange={handleProjectChange}
+                    className="input-field"
+                    required
+                  />
                 </div>
                 
-                <div className="flex items-center space-x-3 p-3 bg-secondary-50 rounded-lg">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-secondary-900">
-                      New user registered
-                    </p>
-                    <p className="text-xs text-secondary-500">
-                      Jane Smith joined the platform - 5 hours ago
-                    </p>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-700 mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    name="details"
+                    value={projectFormData.details}
+                    onChange={handleProjectChange}
+                    className="input-field"
+                    rows="4"
+                    required
+                  />
                 </div>
                 
-                <div className="flex items-center space-x-3 p-3 bg-secondary-50 rounded-lg">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-secondary-900">
-                      Review posted
-                    </p>
-                    <p className="text-xs text-secondary-500">
-                      Mike Johnson reviewed "Mobile App UI" - 1 day ago
-                    </p>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-700 mb-2">
+                    Submission Date
+                  </label>
+                  <input
+                    type="date"
+                    name="submission_date"
+                    value={projectFormData.submission_date}
+                    onChange={handleProjectChange}
+                    className="input-field"
+                    required
+                  />
                 </div>
                 
-                <div className="flex items-center space-x-3 p-3 bg-secondary-50 rounded-lg">
-                  <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <div className="flex-1">
-                    <p className="text-sm font-medium text-secondary-900">
-                      New project created
-                    </p>
-                    <p className="text-xs text-secondary-500">
-                      Admin created "Database Design Project" - 2 days ago
-                    </p>
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-secondary-700 mb-2">
+                    Last Date
+                  </label>
+                  <input
+                    type="date"
+                    name="last_date"
+                    value={projectFormData.last_date}
+                    onChange={handleProjectChange}
+                    className="input-field"
+                    required
+                  />
                 </div>
-              </div>
+                
+                <button type="submit" className="w-full btn-primary">
+                  Create Project
+                </button>
+              </form>
             </div>
           </div>
         </div>

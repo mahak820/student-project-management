@@ -27,29 +27,7 @@ const getStudentProjects = async (token) => {
 
   return response.data;
 };
-const getUserProjects = async(uid , token) =>{
-
-   const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const response = await axios.get(`/api/project/${uid}`, options);
- 
-  return response.data;
-}
-const deteleProjects = async(_pid , token) =>{
-console.log(_pid)
-   const options = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  };
-  const response = await axios.delete(`/api/project/${_pid}`, options);
-//  console.log(response.data)
-  return response.data;
-}
 
 
-const projectService = {addProject,getStudentProjects,getUserProjects,deteleProjects}
+const projectService = {addProject,getStudentProjects}
 export default projectService

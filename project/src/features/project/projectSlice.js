@@ -8,7 +8,6 @@ const projectSlice = createSlice({
     initialState : {
         project : {} ,
         projects :[],
-        userProjects :[],
         isLoading : false ,
         isError : false ,
         isSuccess : false,
@@ -50,44 +49,6 @@ const projectSlice = createSlice({
             state.projects = action.payload
         })
         .addCase(getStudentProjects.rejected ,(state,action)=>{
-            state.isLoading = false
-            state.isError = true
-            state.isSuccess = false
-            state.message = action.message
-        })
-         // GET topics
-        .addCase(getProjects.pending ,(state,action)=>{
-                state.isLoading = true
-                state.isError = false
-                state.isSuccess = false
-                 // state.message =
-        })
-        .addCase(getProjects.fulfilled ,(state,action)=>{
-            state.isLoading = false
-            state.isError = false
-            state.isSuccess = true
-            state.userProjects = action.payload
-        })
-        .addCase(getProjects.rejected ,(state,action)=>{
-            state.isLoading = false
-            state.isError = true
-            state.isSuccess = false
-            state.message = action.message
-        })
-         // GET topics
-        .addCase(userDeleteProjects.pending ,(state,action)=>{
-                state.isLoading = true
-                state.isError = false
-                state.isSuccess = false
-                 // state.message =
-        })
-        .addCase(userDeleteProjects.fulfilled ,(state,action)=>{
-            state.isLoading = false
-            state.isError = false
-            state.isSuccess = true
-            state.userProjects = state.userProjects.filter(project => project._id !== action.payload.id )     
-          })
-        .addCase(userDeleteProjects.rejected ,(state,action)=>{
             state.isLoading = false
             state.isError = true
             state.isSuccess = false
@@ -154,5 +115,76 @@ export const addProject = createAsyncThunk("ADD/PROJECT", async({githubLink,desc
 );
 
 
- 
+//GET ALL PROJECTS OF A USER
 
+export const getAllProjectsOfUser = createAsyncThunk(
+  "GET/USER_PROJECTS",
+  async (uid, thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+ 
+    try {
+      return await projectService.getAllProjects(uid , token);
+    } catch (error) {
+      const message = error.response?.data?.message || error.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+
+//GET ALL PROJECTSTOPICS
+
+export const getAllProjectTopcis = createAsyncThunk(
+  "GET/PROJECT_TOPICS",
+  async (_ ,  thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+ 
+    try {
+      return await projectService.getProjectTopcis(token);
+    } catch (error) {
+      const message = error.response?.data?.message || error.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+//GET ALL SUBMITTED PORJECTS
+
+export const getAllSubmittedProjects = createAsyncThunk(
+  "GET/SUBMITTED_PROJECTS",
+  async (_ ,  thunkAPI) => {
+    const token = thunkAPI.getState().auth.user.token;
+ 
+    try {
+      return await projectService.getProjectTopcis(token);
+    } catch (error) {
+      const message = error.response?.data?.message || error.message;
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+
+// add project topic ADMIN
+export const addProjectTopic = createAsyncThunk("ADD/PROJECT_TOPIC", async(projectFormData,thunkAPI)=>{
+             let token = thunkAPI.getState().auth.user.token
+
+    try{
+ return await projectService.addProjectTopic(projectFormData, token)
+    }catch(error){
+       const message = error.response.data.message
+       return thunkAPI.rejectWithValue(message) 
+    }
+ })
+
+ // update  project topic ADMIN
+export const updateProjectTopic = createAsyncThunk("UPDATE/PROJECT_TOPIC", async({ptid , formData},thunkAPI)=>{
+             let token = thunkAPI.getState().auth.user.token
+
+    try{
+ return await projectService.updateProjectTopic(ptid , formData, token)
+    }catch(error){
+       const message = error.response.data.message
+       return thunkAPI.rejectWithValue(message) 
+    }
+ })

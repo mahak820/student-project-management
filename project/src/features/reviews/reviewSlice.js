@@ -54,6 +54,25 @@ const reviewSlice = createSlice({
             state.isSuccess = false
             state.message = action.message
         })
+        // get all reviews (admin)
+         .addCase(getAllReviewsAdmin.pending ,(state,action)=>{
+                state.isLoading = true
+                state.isError = false
+                state.isSuccess = false
+                 // state.message =
+        })
+        .addCase(getAllReviewsAdmin.fulfilled ,(state,action)=>{
+            state.isLoading = false
+            state.isError = false
+            state.isSuccess = true
+           state.reviews =  action.payload
+        })
+        .addCase(getAllReviewsAdmin.rejected ,(state,action)=>{
+            state.isLoading = false
+            state.isError = true
+            state.isSuccess = false
+            state.message = action.message
+        })
        
      
     }
@@ -86,4 +105,16 @@ export const getreviews = createAsyncThunk("GET/REVIEW", async(_,thunkAPI)=>{
     }
  })
 
+ // get review
+export const getAllReviewsAdmin = createAsyncThunk("GET/ALL_REVIEWS", async(_,thunkAPI)=>{
+
+             let token = thunkAPI.getState().auth.user.token
+          
+    try{
+        return await reviewService.getAllReviews(token)
+    }catch(error){
+       const message = error.response.data.message
+       return thunkAPI.rejectWithValue(message) 
+    }
+ })
 

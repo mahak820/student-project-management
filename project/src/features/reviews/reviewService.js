@@ -22,9 +22,22 @@ const getReviews = async(token) =>{
     const response = await axios.get(`/api/review`,options)
 
     return response.data
- 
 
 }
 
-const reviewService = {addReview, getReviews}
+//get all reviews ADMIN
+const getAllReviews = async(token) =>{
+ 
+ let options = {
+        headers : {
+            authorization : `Bearer ${token}`
+        }
+    }
+    const response = await axios.get(`/api/admin/review`,options)
+
+    return response.data
+
+}
+
+const reviewService = {addReview, getReviews , getAllReviews}
 export default reviewService
