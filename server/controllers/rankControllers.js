@@ -26,7 +26,7 @@ const getRank = expressAsyncHandler(async (req, res) => {
       ranks: result
     });
   } catch (error) {
-    console.error("Error in getRanksByTopic:", error);
+    
     res.status(500).json({ message: "Failed to fetch ranks" });
   }
 });

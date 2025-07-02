@@ -11,7 +11,7 @@ const getAllStudentsWithDetails = expressAsyncHandler(async (req, res) => {
   try {
     // Step 1: Get all project topics
     const topics = await ProjectTopic.find();
-  console.log(topics)
+ 
     const result = [];
 
     for (const topic of topics) {
@@ -19,8 +19,7 @@ const getAllStudentsWithDetails = expressAsyncHandler(async (req, res) => {
       const projects = await Project.find({  projectTopic : topic._id })
         .populate('user', 'name')
         .populate('projectTopic', 'topic');
-          console.log("Topic:", topic.topic);
-  console.log(projects)
+          
       // Step 3: For each project, get reviews
       const projectsWithReviews = await Promise.all(
         projects.map(async (project) => {
@@ -37,14 +36,14 @@ const getAllStudentsWithDetails = expressAsyncHandler(async (req, res) => {
           };
         })
       );
-      console.log(projectsWithReviews)
+
 
       result.push({
         topic: topic.topic,
         projects: projectsWithReviews,
       });
     }
-   console.log(result)
+
     res.status(200).json(result);
   } catch (error) {
     console.error("Error in getAllStudentsWithDetails:", error);
