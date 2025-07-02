@@ -1,5 +1,5 @@
 import axios from "axios"
-
+import {api} from "../../api"
 const getTopic = async (token) => {
 
   let options = {
@@ -7,7 +7,7 @@ const getTopic = async (token) => {
             authorization : `Bearer ${token}`
         }
     }
-    const response = await axios.get("/api/projectTopic",options)
+    const response = await axios.get(`${api}/projectTopic`,options)
    
     return response.data
  

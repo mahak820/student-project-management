@@ -1,13 +1,14 @@
 import axios from "axios"
+import {api} from "../../api"
 
 const register = async(formData) =>{
-     const response = await axios.post("/api/auth/register",formData)
+     const response = await axios.post(`${api}/auth/register`,formData)
      localStorage.setItem("user",JSON.stringify(response.data))
      return response.data
 }
 const login = async (formData) => {
   try {
-    const response = await axios.post("/api/auth/login", formData)
+    const response = await axios.post(`${api}/auth/login`, formData)
     localStorage.setItem("user", JSON.stringify(response.data))
     return response.data
   } catch (error) {
@@ -27,13 +28,13 @@ const allUsers = async (token) => {
         }
     }
 
-  const response = await axios.get(`/api/admin/users` , options)
+  const response = await axios.get(`${api}/admin/users` , options)
   return response.data
 
 }
 
 const adminRegister = async(formData) =>{
-     const response = await axios.post("/api/auth/register",formData)
+     const response = await axios.post(`${api}/auth/register`,formData)
      
      return response.data
 }

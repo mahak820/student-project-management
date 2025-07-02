@@ -1,4 +1,5 @@
 import axios from "axios"
+import {api} from '../../api'
 
 const addProfile = async (formData,token) => {
   let options = {
@@ -6,7 +7,7 @@ const addProfile = async (formData,token) => {
             authorization : `Bearer ${token}`
         }
     }
-    const response = await axios.post("/api/user_profile",formData,options)
+    const response = await axios.post(`${api}/user_profile`,formData,options)
 
     return response.data
  
@@ -20,7 +21,7 @@ const getProfile = async (token) => {
       Authorization: `Bearer ${token}`
     }
   };
-  const response = await axios.get("/api/user_profile", config);
+  const response = await axios.get(`${api}/user_profile`, config);
   return response.data;
 };
 
@@ -31,7 +32,7 @@ const updatedprofile = async (formData,token) => {
       Authorization: `Bearer ${token}`
     }
   };
-  const response = await axios.put("/api/user_profile", formData,config);
+  const response = await axios.put(`${api}/user_profile`, formData,config);
   return response.data;
 };
 

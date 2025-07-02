@@ -1,4 +1,5 @@
 import axios from "axios"
+import {api} from '../../api'
 
 
 const addReview = async(payload,projectTopicId , token) =>{
@@ -7,7 +8,7 @@ const addReview = async(payload,projectTopicId , token) =>{
             authorization : `Bearer ${token}`
         }
     }
-    const response = await axios.post(`/api/review/${projectTopicId}`,payload ,options)
+    const response = await axios.post(`${api}/review/${projectTopicId}`,payload ,options)
     return response.data
  
 
@@ -19,7 +20,7 @@ const getReviews = async(token) =>{
             authorization : `Bearer ${token}`
         }
     }
-    const response = await axios.get(`/api/review`,options)
+    const response = await axios.get(`${api}/review`,options)
 
     return response.data
 
@@ -33,7 +34,7 @@ const getAllReviews = async(token) =>{
             authorization : `Bearer ${token}`
         }
     }
-    const response = await axios.get(`/api/admin/reviews`,options)
+    const response = await axios.get(`${api}/admin/reviews`,options)
 
     return response.data
 
@@ -47,7 +48,7 @@ const addAdminReview = async(formData , token) =>{
             authorization : `Bearer ${token}`
         }
     }
-    const response = await axios.post(`/api/admin/review`,formData , options)
+    const response = await axios.post(`${api}/admin/review`,formData , options)
 
     return response.data
 

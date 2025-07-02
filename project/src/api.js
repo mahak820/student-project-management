@@ -1,0 +1,1 @@
+export const api = `https://student-project-management-c8ne.onrender.com/api`
