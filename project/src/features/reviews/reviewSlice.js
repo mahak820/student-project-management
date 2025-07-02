@@ -81,12 +81,12 @@ export default reviewSlice.reducer
  
 
 // add review
-export const addreviews = createAsyncThunk("ADD/REVIEW", async({ payload, projectTopicId },thunkAPI)=>{
+export const addreviews = createAsyncThunk("ADD/REVIEW", async({ payload, projectTopicId},thunkAPI)=>{
    
              let token = thunkAPI.getState().auth.user.token
-            //  console.log(token)
+           
     try{
-        return await reviewService.addReview(payload,projectTopicId,token)
+        return await reviewService.addReview(payload,projectTopicId ,token)
     }catch(error){
        const message = error.response.data.message
        return thunkAPI.rejectWithValue(message) 
@@ -117,4 +117,5 @@ export const getAllReviewsAdmin = createAsyncThunk("GET/ALL_REVIEWS", async(_,th
        return thunkAPI.rejectWithValue(message) 
     }
  })
+
 

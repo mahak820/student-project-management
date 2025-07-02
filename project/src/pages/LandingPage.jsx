@@ -122,8 +122,8 @@ const LandingPage = () => {
                   </svg>
                 </div>
                 <div>
-                  <div className="text-sm font-semibold text-slate-800">Project Approved</div>
-                  <div className="text-xs text-slate-500">2 minutes ago</div>
+                  <div className="text-sm font-semibold text-slate-800">Centralized Platform <br /> for Real Projects</div>
+                 
                 </div>
               </div>
             </div>
@@ -146,8 +146,8 @@ const LandingPage = () => {
           <FloatingCard delay={2} className="absolute bottom-40 left-6">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/50">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">85%</div>
-                <div className="text-xs text-slate-600">Completion Rate</div>
+                <div className="text-2xl font-bold text-blue-600">100%</div>
+                <div className="text-xs text-slate-600">Organized Code Submission</div>
               </div>
             </div>
           </FloatingCard>
@@ -164,7 +164,7 @@ const LandingPage = () => {
                   </svg>
                 </div>
                 <div className="text-sm font-semibold text-slate-800">Team Project</div>
-                <div className="text-xs text-slate-500">5 members active</div>
+                <div className="text-xs text-slate-500">Performance Analytics for Admins</div>
               </div>
             </div>
           </FloatingCard>
@@ -179,7 +179,7 @@ const LandingPage = () => {
                 </div>
                 <div>
                   <div className="text-xs font-semibold text-slate-800">Due Tomorrow</div>
-                  <div className="text-xs text-slate-500">Math Assignment</div>
+                  <div className="text-xs text-slate-500">Blog App</div>
                 </div>
               </div>
             </div>
@@ -206,10 +206,10 @@ const LandingPage = () => {
           }`}>
             
             {/* Badge */}
-            <div className="inline-flex items-center px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-8 animate-pulse">
+            {/* <div className="inline-flex items-center px-4 py-2 bg-blue-100 rounded-full text-blue-700 text-sm font-medium mb-8 animate-pulse">
               <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
               🎉 Now serving 10,000+ students worldwide
-            </div>
+            </div> */}
 
             <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-slate-800 mb-6 leading-none">
               Think<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Build</span>
@@ -249,10 +249,10 @@ const LandingPage = () => {
             <div className="flex flex-col items-center">
               <p className="text-sm text-slate-400 mb-4">Trusted by students from</p>
               <div className="flex items-center space-x-8 opacity-60">
-                <div className="text-lg font-bold text-slate-600">Harvard</div>
-                <div className="text-lg font-bold text-slate-600">MIT</div>
+                <div className="text-lg font-bold text-slate-600">Medi-Caps</div>
+                <div className="text-lg font-bold text-slate-600">IIT</div>
+                <div className="text-lg font-bold text-slate-600">IIM</div>
                 <div className="text-lg font-bold text-slate-600">Stanford</div>
-                <div className="text-lg font-bold text-slate-600">Oxford</div>
               </div>
             </div>
           </div>

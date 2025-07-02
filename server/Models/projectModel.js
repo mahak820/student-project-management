@@ -27,7 +27,21 @@ const projectSchema = new mongoose.Schema(
        isSubmit :{
         type : Boolean,
         default : false
-    }
+    } , 
+    
+    adminReview : {
+      type : String ,
+      default : "",
+      } , 
+    adminRating : {
+
+      type : Number ,
+      default : 0
+      },
+      rank : {
+        type : Number ,
+      }
+    
 
 } , 
 {

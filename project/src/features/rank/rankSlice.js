@@ -47,7 +47,7 @@ export default rankSlice.reducer
 export const Rank = createAsyncThunk("FETCH/RANK", async(_,thunkAPI)=>{
     
              let token = thunkAPI.getState().auth.user.token
-            //  console.log(token)
+            
     try{
         return await rankService.rank(token)
     }catch(error){

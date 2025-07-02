@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser, registerUser } from '../features/auth/authSlice'
+import {toast} from 'react-toastify'
 
 const Register = () => {
   const [formData, setFormData] = useState({

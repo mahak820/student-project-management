@@ -91,7 +91,6 @@ export const addprofile = createAsyncThunk("ADD/PROFILE", async(formData,thunkAP
  export const getProfile = createAsyncThunk("GET/PROFILE", async (_, thunkAPI) => {
 
    const token = thunkAPI.getState().auth.user.token;
-     console.log(token)
   try {
    
     return await profileService.getProfile(token);
@@ -102,7 +101,7 @@ export const addprofile = createAsyncThunk("ADD/PROFILE", async(formData,thunkAP
  export const updatedProfile = createAsyncThunk("POST/PROFILE", async (formData, thunkAPI) => {
 
    const token = thunkAPI.getState().auth.user.token;
-     console.log(token)
+     
   try {
    
     return await profileService.updatedprofile(formData,token);

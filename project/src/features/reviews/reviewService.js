@@ -1,13 +1,13 @@
 import axios from "axios"
 
 
-const addReview = async(payload,projectTopicId,token) =>{
+const addReview = async(payload,projectTopicId , token) =>{
  let options = {
         headers : {
             authorization : `Bearer ${token}`
         }
     }
-    const response = await axios.post(`/api/review/${projectTopicId}`,payload,options)
+    const response = await axios.post(`/api/review/${projectTopicId}`,payload ,options)
     return response.data
  
 
@@ -33,11 +33,26 @@ const getAllReviews = async(token) =>{
             authorization : `Bearer ${token}`
         }
     }
-    const response = await axios.get(`/api/admin/review`,options)
+    const response = await axios.get(`/api/admin/reviews`,options)
 
     return response.data
 
 }
 
-const reviewService = {addReview, getReviews , getAllReviews}
+//ADD ADMIN REVIEW & RANK
+const addAdminReview = async(formData , token) =>{
+ 
+ let options = {
+        headers : {
+            authorization : `Bearer ${token}`
+        }
+    }
+    const response = await axios.post(`/api/admin/review`,formData , options)
+
+    return response.data
+
+}
+
+
+const reviewService = {addReview, getReviews , getAllReviews , addAdminReview}
 export default reviewService

@@ -47,7 +47,7 @@ export default topicSlice.reducer
 export const getTopics = createAsyncThunk("FETCH/TOPICS", async(_,thunkAPI)=>{
     
              let token = thunkAPI.getState().auth.user.token
-            //  console.log(token)
+           
     try{
         return await projectTopicService.getTopic(token)
     }catch(error){

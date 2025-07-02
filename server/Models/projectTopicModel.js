@@ -18,7 +18,6 @@ const projectTopicSchema = new mongoose.Schema({
         required : true
     } ,
  
-    
   
 },
 {

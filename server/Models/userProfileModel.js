@@ -9,32 +9,31 @@ const userProfileShema = new mongoose.Schema({
     },
     github :{
         type : String,
-        required : true
+        default : ""
     },
      linkedin :{
         type : String,
-        required : true
+        default : ""
     },
      year :{
         type : String,
-        required : true
+        default : ""
     },
      collage :{
         type : String,
-        required : true
+        default : ""
     },
     course :{
      type : String,
-        required : true
+        default : ""
     },
     experience :{
             type : String,
-        required : true 
+       default : ""
     },
     isComplete :{
         type : Boolean,
          default : false,
-         required : true
     }
 })
 module.exports = mongoose.model("UserPofile",userProfileShema)

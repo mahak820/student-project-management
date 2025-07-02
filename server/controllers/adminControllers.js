@@ -82,7 +82,7 @@ const getProjects = async(req,res) =>{
      res.status(200).json(projects)
 }
 
-// get all projects
+// get all projects of a user
 const getUserAllProjects = async(req,res) =>{
 
   const userId = req.params.uid
@@ -94,6 +94,14 @@ const getUserAllProjects = async(req,res) =>{
     }
      res.status(200).json(projects)
 }
+
+//GET USER'S ALL PORJECT NEW
+// const getUserAllProjectsUpdated = expressAsyncHandler(async (req , res) => {
+//   console.log("This function was called")
+//   res.json({
+//     msg : "HEllo world"
+//   })
+// } )
 
 // get a single project
 const getProject =expressAsyncHandler( async(req,res) =>{
@@ -146,9 +154,7 @@ if(!deleteTopic){
    throw new Error("topic not deleted")
 }     
     
-       res.status(200).json({id : deleteTopic._id,
-        msg :"topic deleted"
-       })
+       res.status(200).json(deleteTopic)
 })
 
 
@@ -167,30 +173,12 @@ const updateProjectTopic = expressAsyncHandler(async(req,res)  =>{
 
 // add a review
 const addReview = expressAsyncHandler( async(req,res)  =>{
-  const {rating,comment} = req.body
+  const {projectId , rank ,comment} = req.body
 
-  if(!rating||!comment){
-   res.status(400)
-    throw new Error(" fill all details") 
-  }
+  const project = await Project.findByIdAndUpdate(projectId , {rank : rank , adminReview : comment} , {new : true}).populate('user' , 'name , email , _id').populate('projectTopic')
   
-  const review = await Review.create({
-     
-user: req.user._id, // ✅ from protect middleware
-    projectTopic: req.params._ptid,
-      rating,
-      comment
-  })
-   const populatedReview = await review.populate([
-         { path: "user", select: "name" },
-         { path: "projectTopic", select: "topic" },
-       ]);
-   if(!review){
-   res.status(400)
-    throw new Error(" review not found") 
-  }
-
-     res.status(201).json(populatedReview)
+ 
+     res.status(201).json(project)
 })
 
 
@@ -214,8 +202,16 @@ const deleteUser = expressAsyncHandler(async(req,res)  =>{
 //GET ALL REVIEWS 
 const getAllReviews = expressAsyncHandler(async(req,res) =>{
 
-    const reviews = await Review.find()
-     if(!reviews){
+const reviews = await Review.find()
+  .populate('user', 'name ,  email ,  _id')
+  .populate({
+    path: 'project',
+    populate: {
+      path: 'user', // change this to the field inside project you want to populate
+      select: 'name , email' // optional, choose fields
+    }
+  })
+  .populate('projectTopic');     if(!reviews){
       res.status(400)
     throw new Error("not found all the project topic")  
   }
@@ -269,6 +265,33 @@ const addRank = expressAsyncHandler(async(req,res)  =>{
 
   res.status(201).json(populatedRank);
 });
-module.exports = {getAllReviews , getAllProjectTopic, updateProjectTopic,addProjectTopic,getAllUser,getUser,addUser,getProject,getProjects,addRank,addReview,getAllUserProfile,deleteProjectTopic,deleteUser , getUserAllProjects}
+
+// get all projects submitted on a topic
+const getSubmittedProjectsOnTopic = expressAsyncHandler(async(req,res) =>{
+
+    const projects = await Project.find({projectTopic : req.params._ptid}).populate('projectTopic').populate('user')
+     if(!projects){
+      res.status(400)
+    throw new Error("not found all the project topic")  
+  }
+  res.status(200).json(projects)
+
+})
+
+// get single project topic
+const getSingleProjectTopic = expressAsyncHandler(async(req,res) =>{
+
+    const projectTopic = await ProjectTopic.findById(req.params._ptid)
+     if(!projectTopic){
+      res.status(400)
+    throw new Error("not found all the project topic")  
+  }
+  res.status(200).json(projectTopic)
+
+})
+
+
+
+module.exports = {getSingleProjectTopic , getUserAllProjects , getSubmittedProjectsOnTopic , getAllReviews , getAllProjectTopic, updateProjectTopic,addProjectTopic,getAllUser,getUser,addUser,getProject,getProjects,addRank,addReview,getAllUserProfile,deleteProjectTopic,deleteUser }
 
 

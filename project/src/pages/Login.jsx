@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUser } from '../features/auth/authSlice'
+import {toast} from 'react-toastify'
+
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -9,7 +11,7 @@ const Login = () => {
     password: ''
   })
   
-  const { user } = useSelector(state => state.auth)
+  const { user , isError , message } = useSelector(state => state.auth)
   const navigate = useNavigate()
   const dispatch = useDispatch()
   
@@ -26,7 +28,13 @@ const Login = () => {
     if (user && user.isAdmin) {
       navigate('/admin')
     }
-  }, [dispatch, user])
+
+    if(isError && message ){
+      toast.error("Invalid Credentials")
+    }
+    
+    
+  }, [dispatch, user , isError , message ])
   
   const handleChange = (e) => {
     setFormData({
