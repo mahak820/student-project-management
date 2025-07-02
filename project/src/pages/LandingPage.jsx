@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,12 +45,12 @@ const Navbar = () => {
                 {item}
               </a>
             ))}
-            <a 
-              href="/login"
+            <button
+              onClick={navigate('/login')}
               className="bg-blue-600 text-white px-6 py-2 rounded-full font-medium hover:bg-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               Sign In
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -225,24 +226,24 @@ const LandingPage = () => {
             
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
-              <a 
-                href="/register" 
+              <button
+                onClick={navigate('/register')}
                 className="group bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg shadow-2xl hover:shadow-3xl transform hover:scale-105 transition-all duration-300 flex items-center justify-center"
               >
                 Start Free Today
                 <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
-              </a>
-              <a 
-                href="#features" 
+              </button>
+              <button
+                
                 className="group bg-white text-slate-700 px-8 py-4 rounded-2xl font-semibold text-lg border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transform hover:scale-105 transition-all duration-300 flex items-center justify-center shadow-lg"
               >
                 <svg className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h6m2-7a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 Watch Demo
-              </a>
+              </button>
             </div>
 
             {/* Social Proof */}

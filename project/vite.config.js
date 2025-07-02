@@ -9,7 +9,7 @@ export default defineConfig({
       '/api' :{
         changeorigin : true,
         secure : false, 
-        target : `http://localhost:8080`
+        target : `https://student-project-management-c8ne.onrender.com/api`
       }
     }
   }
